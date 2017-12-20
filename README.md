@@ -1,11 +1,15 @@
-#Setup
+# Setup
 npm install -g @angular/cli
 
 npm install -g firebase-tools
+
 firebase login
+
 firebase init
+
 # to deploy to firebase
     ng build
+
     firebase deploy
 
 # Ferment
