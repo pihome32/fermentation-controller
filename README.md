@@ -17,6 +17,16 @@ Requires the database and hosting modules.
 Set the public directory to 'dist' 
 default for all others.  
 
+Check database.rules.json 
+set to the following. 
+{
+  "rules": {
+    ".read": "true",
+    ".write": "true"
+  }
+}
+
+
 setup development environment.
 npm install 
 
