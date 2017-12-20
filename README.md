@@ -1,12 +1,24 @@
-# Setup
+# Setup Development Platform
 
+Visual Studio code was used to develop this project. 
+
+Install Node and NPM  on your development platform.
+
+From command prompt install the Angular CLI. 
 npm install -g @angular/cli
 
+Install Firebase tools.  
 npm install -g firebase-tools
 
 firebase login
 
 firebase init
+Requires the database and hosting modules.
+Set the public directory to 'dist' 
+default for all others.  
+
+setup development environment.
+npm install 
 
 # to deploy to firebase
     ng build
