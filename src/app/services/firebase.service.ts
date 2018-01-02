@@ -83,18 +83,29 @@ get profileList(){
 get chart() {
 	return this.af.list('/TemperatureData', ref => ref).snapshotChanges().map(changes => {
 		let rows = changes.map(ch => {
+			let mode = ch.payload.val().currentState
+			if (mode == 0) mode = 'Off';
+			if (mode == 1) mode = 'Cool';
+			if (mode == 2) mode = 'Heat';
+			let options = {  
+				month: "short",  
+				day: "numeric", hour: "2-digit", minute: "2-digit"  
+			};  
+			let toolTipDate = new Date(ch.payload.val().ts).toLocaleDateString("en-US", options);
 			if (this.tempFormat == "C"){
 				let temp ={c:[
-					{v: new Date(ch.payload.val().ts), f:'February 28, 2008'},
+					{v: new Date(ch.payload.val().ts)},
 					{v: parseFloat(ch.payload.val().beerTemp).toFixed(2)}, 
-					{v: parseFloat(ch.payload.val().chamberTemp).toFixed(2)}
+					{v: parseFloat(ch.payload.val().chamberTemp).toFixed(2)},
+					{v: this.customToolTip(toolTipDate,parseFloat(ch.payload.val().chamberTemp).toFixed(2),mode)}
 				]}
 				return temp;
 			}
 			else{
-				let temp ={c:[{v: new Date(ch.payload.val().ts), f:'February 28, 2008'},
+				let temp ={c:[{v: new Date(ch.payload.val().ts)},
 					{v: (parseFloat(ch.payload.val().beerTemp)* 1.8 + 32).toFixed(2)},
-					{v: (parseFloat(ch.payload.val().chamberTemp)* 1.8 + 32).toFixed(2)}
+					{v: (parseFloat(ch.payload.val().chamberTemp)* 1.8 + 32).toFixed(2)},
+					{v: this.customToolTip(toolTipDate,(parseFloat(ch.payload.val().chamberTemp)*1.8+32).toFixed(2),mode)}
 				]}
 				return temp;
 			}
@@ -103,9 +114,21 @@ get chart() {
 			{id: '1', label: 'Date', type: 'date'},
 			{id: '2', label: 'Beer', type: 'number'},
 			{id: '3', label: 'Chamber', type: 'number'},
+			{id: '4', label: 'Tooltip', type: 'string', role: 'tooltip', p: {'html': true}},
 		],
 		rows:rows}
 	});
+}
+customToolTip(dates,temp,mode){
+	return '<div style="padding:5px 5px 5px 5px;">' 
+	+ dates
+	+'<br>'
+	+ 'Chamber: ' 
+	+ temp
+	+ '<br>'
+	+'State: '
+	+ mode
+	+ '</div>'
 }
 
 table($key:string){

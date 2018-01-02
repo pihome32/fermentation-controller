@@ -56,6 +56,7 @@ export class HistoryChartComponent implements OnInit, OnChanges {
         },
       },
         backgroundColor:'#F3F3F3',
+        tooltip: {isHtml: true }
       },
   };  
  
@@ -91,6 +92,7 @@ updateChart (){
         },
       },
       backgroundColor:'#F3F3F3',
+      tooltip: {isHtml: true }
     }, 
   };
     
