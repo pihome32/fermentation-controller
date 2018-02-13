@@ -21,7 +21,7 @@ export class MainComponent implements OnInit {
   funcres: '';
   devices = [];
   loading:boolean = true;
-  currentTab:number = 0;
+  currentMode:number = 0;
   lastTab:number = 0;
   //data:PhotonData | null;
   //curmode:string;
@@ -40,12 +40,13 @@ ngOnInit(){
   this.item = this.fbService.data;
   this.item.subscribe(res =>{
     if (res != undefined){
-      this.currentTab = +res.mode;
+      this.currentMode = +res.mode;
       this.loading = false;
     }
   })
 }
 
+/*
 openDialog() {
   let dialogRef= this.dialog.open(TabChangeDialogComponent, {
     width: '250px',
@@ -56,47 +57,48 @@ openDialog() {
     console.log('dialog closed',result);
     }
   );
-}
+}*/
 
-onChange(mode:number){
-  console.log('tab change',mode, this.currentTab);
-  if (mode == this.currentTab) return;
-  if (this.currentTab != 3) {
-    if (mode != 3){
-      let arg = mode.toString();
+onChange(newMode:number){
+  console.log('tab change newmode/currentmode',newMode, this.currentMode);
+  if (newMode == this.currentMode) return;  //do nothing if attempting to change to currentMode.
+  
+  if (this.currentMode != 3) {
+    if (newMode != 3){
+      let arg = newMode.toString();
       this.particleService.CallFunction('setMode', arg)
       .subscribe(res => {console.log('function call response',res);
-      console.log('function call response current tab',this.currentTab);});
+      console.log('function call response current tab',this.currentMode);});
     }
     return;
   }
 
-  let lastTab = this.currentTab;
-  this.currentTab = mode;
-    let dialogRef= this.dialog.open(TabChangeDialogComponent, {
+  let lastTab = this.currentMode;
+  this.currentMode = newMode;
+  let dialogRef= this.dialog.open(TabChangeDialogComponent, {
     width: '250px', 
   });
 
   dialogRef.afterClosed().subscribe(result => {
     console.log('dialog closed',result);
-    let arg = mode.toString();
+    let arg = newMode.toString();
     if (result == true){
       
       if (arg == '0'){
         this.fbService.deleteList('TemperatureData')
         console.log('delete history');
       }
-      console.log('tabchange test curretn tab',this.currentTab);
-      if (arg == '3'){   //if the mode is profile do not call the particle function.  This will be handled in the profile component.
+      console.log('tabchange test curretn tab',this.currentMode);
+      if (arg == '3'){   //if the newMode is profile do not call the particle function.  This will be handled in the profile component.
         return;
       }
       this.particleService.CallFunction('setMode', arg)
         .subscribe(res => {console.log('function call response',res);
-        console.log('function call response current tab',this.currentTab);});
+        console.log('function call response current tab',this.currentMode);});
       }
       else{
-        console.log('cancel',this.currentTab, lastTab);
-        this.currentTab = lastTab;
+        console.log('cancel',this.currentMode, lastTab);
+        this.currentMode = lastTab;
       }
   });
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-//import { MdInputModule, MdSelectModule, MdRadioModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ParticleService } from '../services/particle.service';
 import {FirebaseService} from '../services/firebase.service';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { PidHelpDialogComponent } from '../pid-help-dialog/pid-help-dialog.component';
 
 export class SettingData {
   Kp : string;
@@ -26,7 +27,7 @@ export class SetupComponent implements OnInit {
   settingData:SettingData;
   userTempPreference : string;
   tempFormat: string;
-  constructor( private fbService : FirebaseService, private particleService: ParticleService) {}
+  constructor( private fbService : FirebaseService, private particleService: ParticleService, public dialog: MatDialog) {}
   
 
   ngOnInit() {
@@ -42,13 +43,50 @@ export class SetupComponent implements OnInit {
       );
 }
 
+openDialog() {
+  const dialogRef = this.dialog.open(PidHelpDialogComponent, {
+    width: '500px'
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(`Dialog result: ${result}`);
+  });
+}
+
 
 setPIDButtonHandler(){
   console.log('PID setting response',this.settingData)
+  let PIDString = '';
+  PIDString = this.settingData.Kp+',';
+  PIDString += this.settingData.Ki+',';
+  PIDString += this.settingData.Kd+',';
+  PIDString += this.settingData.hKp+',';
+  PIDString += this.settingData.hKi+',';
+  PIDString += this.settingData.hKd+',';
+  console.log('PID setting string',PIDString);
+  this.particleService.CallFunction('PIDSetup',PIDString).subscribe(
+    res => console.log('pid man res',res));
 }
 
+
 ManualPIDButtonHandler(){
-  console.log('PID Mode response',this.settingData)
+  console.log('PID Mode response',this.settingData);
+
+  let PIDString = '';
+  PIDString = this.settingData.mainMode+',';
+  PIDString += this.settingData.heatMode+',';
+  if (this.tempFormat =='F'){
+    let output=((parseFloat(this.settingData.output)-32)/ 1.8).toFixed(2);
+    PIDString += output+',';
+  }
+  else{
+    PIDString += this.settingData.output+',';
+  }
+  PIDString += this.settingData.hOutput+',';
+  
+  console.log('PID setting string',PIDString);
+  this.particleService.CallFunction('PIDSetMode',PIDString).subscribe(
+    res => console.log('pid man res',res));
 }
 
 tempChange(event){

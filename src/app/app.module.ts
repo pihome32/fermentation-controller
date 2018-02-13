@@ -46,7 +46,8 @@ import { ProfileChartComponent } from './profile-chart/profile-chart.component';
 import { ProfileDialogComponent } from './profile-dialog/profile-dialog.component';
 import { HistoryChartComponent } from './history-chart/history-chart.component';
 import { TabChangeDialogComponent } from './tab-change-dialog/tab-change-dialog.component';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { PidHelpDialogComponent } from './pid-help-dialog/pid-help-dialog.component';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyC5tA-38qkvkFKQdGlxwh2GkdYtOyHT_Z8",
@@ -73,6 +74,7 @@ export const firebaseConfig = {
     ProfileDialogComponent,
     HistoryChartComponent,
     TabChangeDialogComponent,
+    PidHelpDialogComponent,
     
   ],
   imports: [
@@ -99,7 +101,8 @@ export const firebaseConfig = {
     MatRadioModule,
     MatTableModule,
     MatProgressSpinnerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   
   providers: [

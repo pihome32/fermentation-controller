@@ -81,7 +81,8 @@ get profileList(){
 }
 
 get chart() {
-	return this.af.list('/TemperatureData', ref => ref).snapshotChanges().map(changes => {
+	//last 1008 is to limit to 7 days of history each sample is 10 minutes.  If the list is too long performance is very bad.
+	return this.af.list('/TemperatureData', ref => ref.limitToLast(1008)).snapshotChanges().map(changes => {
 		let rows = changes.map(ch => {
 			let mode = ch.payload.val().currentState
 			if (mode == 0) mode = 'Off';

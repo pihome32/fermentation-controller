@@ -1,9 +1,11 @@
+<div fxLayout ="column"  fxLayoutAlign ="start start"  >
 <h3>Temperature Format Preference</h3>
 <mat-radio-group [(ngModel)]="userTempPreference" name="userTempPreference" type="string" (change)="tempChange($event)">
     <mat-radio-button value="F" >Fahrenheit </mat-radio-button><br>
     <mat-radio-button value="C">Celsius </mat-radio-button>
   </mat-radio-group>
 <h2>PID Settings</h2>
+<button mat-raised-button color='primary' (click)="openDialog()">PID Help</button>
 <div class="container"
      fxLayout
      fxLayout.xs="column"
@@ -11,11 +13,11 @@
      fxLayoutGap="10px">
     <form novalidate (ngSubmit)="setPIDButtonHandler(settingData.value)" #settingForm="ngForm" *ngIf ="settingData">
       <mat-input-container >
-        <label>Main Kp:</label>
+        <label>Main Kp: </label>
         <input matInput  required name="Kp" type="number" [(ngModel)]="settingData.Kp">
       </mat-input-container>
       <mat-input-container >
-        <label>Main Ki:</label>
+        <label >Main Ki:</label>
         <input matInput  required name="Ki" type="number" [(ngModel)]="settingData.Ki">
       </mat-input-container>
       <mat-input-container >
@@ -73,5 +75,5 @@
   </form>
 
 </div>
-
+</div>
 
