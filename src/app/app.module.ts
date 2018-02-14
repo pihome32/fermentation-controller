@@ -115,6 +115,7 @@ export const firebaseConfig = {
     ChangeTempDialogComponent,
     ProfileDialogComponent,
     TabChangeDialogComponent,
+    PidHelpDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
