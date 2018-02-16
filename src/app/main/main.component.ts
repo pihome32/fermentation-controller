@@ -46,25 +46,17 @@ ngOnInit(){
   })
 }
 
-/*
-openDialog() {
-  let dialogRef= this.dialog.open(TabChangeDialogComponent, {
-    width: '250px',
-    
-  });
 
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('dialog closed',result);
-    }
-  );
-}*/
 
 onChange(newMode:number){
   console.log('tab change newmode/currentmode',newMode, this.currentMode);
   if (newMode == this.currentMode) return;  //do nothing if attempting to change to currentMode.
-  
-  if (this.currentMode != 3) {
-    if (newMode != 3){
+  if (newMode == 0){
+    this.fbService.deleteList('TemperatureData')
+    console.log('delete history');
+  }
+  if (this.currentMode !=3) {
+    if (newMode != 3){  //don't call particle function on mode 3 entry as it will be handled by the start of a profile.
       let arg = newMode.toString();
       this.particleService.CallFunction('setMode', arg)
       .subscribe(res => {console.log('function call response',res);
@@ -72,6 +64,7 @@ onChange(newMode:number){
     }
     return;
   }
+ 
 
   let lastTab = this.currentMode;
   this.currentMode = newMode;

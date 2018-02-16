@@ -77,7 +77,7 @@ get profileList(){
 		return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
 	});
 	
-	// .map(res => res);
+	
 }
 
 get chart() {
