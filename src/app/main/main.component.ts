@@ -3,7 +3,7 @@ import { ParticleService } from '../services/particle.service';
 //import {DialogsService} from '../services/dialogs.service';
 import {FirebaseService} from '../services/firebase.service';
 import {PhotonData} from '../models/photon.data';
-import { Observable,Subscription } from 'rxjs/Rx';
+import { Observable,Subscription } from 'rxjs';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { TabChangeDialogComponent } from '../tab-change-dialog/tab-change-dialog.component';
 

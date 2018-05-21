@@ -1,20 +1,35 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+import {map} from 'rxjs/operators';
 import { Injectable} from '@angular/core';
-import { Http, Headers, Response, RequestOptions, URLSearchParams  } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { HttpClient, HttpHeaders, HttpResponse, } from '@angular/common/http';
+
+//  RequestOptions, HttpURLSearchParams  
+
 //import {FirebaseService} from './firebase.service';
 //import {DialogsService} from './dialogs.service';
-import * as EventSource from 'eventsource';
+//import * as EventSource from 'eventsource';
 //declare var EventSource:any;
+export class ParticleLoginResponse {
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    token_type: string;
+  }
 
+export class ParticleData {
+    id: string;
+    expires_in: number;
+    name: string;
+    result: string;
+  }
+  
 @Injectable()
 export class ParticleService {
     accessToken:string = localStorage.getItem('AccessToken');
     device:string = localStorage.getItem('Device');
   //  private dialogsService: DialogsService,private fbService: FirebaseService, 
-    constructor(private http: Http) { 
+    constructor(private http: HttpClient) { 
         
         }
 
@@ -23,8 +38,6 @@ export class ParticleService {
     URLDevice = 'https://api.particle.io/v1/devices/';
     URLSubscribe = 'https://api.particle.io/v1/devices/';
     
-   
-   
 
 CheckLogin():Observable<boolean>{
     let devices = [];
@@ -45,7 +58,7 @@ CheckLogin():Observable<boolean>{
                 }); 
 }
     
-
+/*
     Subscribe(eventName:string): Observable<any> {
         let deviceId = this.device;
         let accessToken = this.accessToken;
@@ -59,33 +72,38 @@ CheckLogin():Observable<boolean>{
             });
         
     }
+*/
 
     GetVariable(varname:string): Observable<any>  {
         let deviceId = this.device;
         let accessToken = this.accessToken;
-        let headers = new Headers({ 'Authorization': 'Bearer '+accessToken});
-        headers.append('content-type', `application/json`);
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.URLDevice+deviceId+'/'+varname,options)
-            .map(res => res.json().result)
-            .catch(this.handleError);
+        let headers = new HttpHeaders()
+            .set('Authorization', 'Bearer '+accessToken)
+            .set('content-type', `application/json`);
+        return this.http.get<ParticleData>(this.URLDevice+deviceId+'/'+varname,{headers})
+        .map(res => {return JSON.parse(res.result);}
+        )
+        .catch(this.handleError);
     }
 
     CallFunction(funcname:string, arg:string): Observable<any>  {
         let deviceId = this.device;
         let accessToken = this.accessToken;
-        let headers = new Headers({ 'Authorization': 'Bearer '+accessToken});
-        headers.append('content-type', `application/json`);
-        let options = new RequestOptions({ headers: headers });
+        let headers = new HttpHeaders()
+            .set('Authorization', 'Bearer '+accessToken)
+            .set('content-type', `application/json`);
         let body = {args: arg};
-        return this.http.post(this.URLDevice+deviceId+'/'+funcname,body,options)
-            .map(res => res.json().return_value)
+        return this.http.post<ParticleData>(this.URLDevice+deviceId+'/'+funcname,body,{headers})
+            .map(res => 
+                res
+                //res.json().return_value
+            )
             .catch(this.handleError);
     }
 
     Login(username:string, password:string): Observable<any>{
-        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded'});
-        let options = new RequestOptions({ headers: headers });
+        let httpOptions = {headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded'})};
+       // let options = new RequestOptions({ headers: headers });
         let urlSearchParams = new URLSearchParams();
         urlSearchParams.append('username', username);
         urlSearchParams.append('password', password);
@@ -94,36 +112,36 @@ CheckLogin():Observable<boolean>{
         urlSearchParams.append('client_secret', 'particle');
         urlSearchParams.append('expires_in', '7776000');
         let body = urlSearchParams.toString();
-        return this.http.post(this.URL,body,options)
-            .map(res => {body = res.json().access_token;
-                localStorage.setItem('AccessToken',body);
+        return this.http.post<ParticleLoginResponse>(this.URL,body,httpOptions)
+            .map(res => { console.log("login res",res);
+                localStorage.setItem('AccessToken',res.access_token);
                 this.accessToken = localStorage.getItem('AccessToken');
-                })
-            .catch(this.handleError);
+                },
+                err => this.handleError);
+        
     }
      
     NewDevice(device:string){
         localStorage.setItem('Device',device);
         this.device = localStorage.getItem('Device');
     }
-    
+   
     ListDevices(): Observable<any> {
         let accessToken =  this.accessToken;
-        let headers = new Headers({ 'Authorization': 'Bearer '+accessToken});
-        headers.append('content-type', `application/json`);
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.URLDevice,options)
-            .map(this.extractDeviceData)
+        let headers = new HttpHeaders()
+            .set('Authorization', 'Bearer '+accessToken)
+            .set('content-type', `application/json`);
+        return this.http.get<ParticleData>(this.URLDevice,{headers})
+            .map(res => {console.log('list devices called',res);
+                let device = [];
+                let body = res;
+                for (let i in body) {
+                    device[i]=body[i].name;
+                }
+                return device;})
             .catch(this.handleError);
     }
-    private extractDeviceData(res: Response) {
-        let device = [];
-        let body = res.json();
-        for (let i in body) {
-            device[i]=body[i].name;
-        }
-        return device;
-    }
+    
 
     
    private handleError (error: Response | any) {
@@ -131,12 +149,12 @@ CheckLogin():Observable<boolean>{
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+     // const err = body.error || JSON.stringify(body);
+     // errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
 console.error('error response:',errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 }

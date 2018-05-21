@@ -1,8 +1,7 @@
 import { Component, OnInit, Injector,Input } from '@angular/core';
 import { MatDialog } from "@angular/material";
 import {DataSource} from '@angular/cdk/collections';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Observable, BehaviorSubject} from 'rxjs';
 ////import 'rxjs/add/observable/of';
 //import 'rxjs/add/operator/startWith';
 //import 'rxjs/add/observable/merge';

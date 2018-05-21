@@ -1,11 +1,10 @@
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireDatabase, AngularFireObject, AngularFireList, AngularFireAction  } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+
 import * as firebase from 'firebase/app';
 import {PhotonData} from '../models/photon.data';
 

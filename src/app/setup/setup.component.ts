@@ -34,9 +34,13 @@ export class SetupComponent implements OnInit {
   this.tempFormat = localStorage.getItem('tempFormat');
   this.userTempPreference = localStorage.getItem('tempFormat');
   this.particleService.GetVariable('PIDsetting')
-      .subscribe(res => {this.settingData = JSON.parse(res);
+      .subscribe(res => {
+        console.log('setting var read',res);
+        this.settingData = res;
         if (this.tempFormat == "F"){
+          console.log('setting var output',this.settingData.output);
           this.settingData.output=(parseFloat(this.settingData.output)* 1.8 + 32).toFixed(2);
+          console.log('setting var output mod',this.settingData.output);
       }
         console.log('setting response',this.settingData);
       }

@@ -1,4 +1,3 @@
-Test
 # Setup Development Platform
 
 Visual Studio code was used to develop this project. 

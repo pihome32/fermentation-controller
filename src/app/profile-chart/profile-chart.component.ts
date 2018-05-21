@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import {FirebaseService} from '../services/firebase.service';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 
 
