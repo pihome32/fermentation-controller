@@ -33,7 +33,7 @@ export class SetupComponent implements OnInit {
   ngOnInit() {
   this.tempFormat = localStorage.getItem('tempFormat');
   this.userTempPreference = localStorage.getItem('tempFormat');
-  this.particleService.GetVariable('PIDsetting')
+  this.particleService.GetVariable('PIDsetting') 
       .subscribe(res => {
         console.log('setting var read',res);
         this.settingData = res;
