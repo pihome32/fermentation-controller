@@ -21,7 +21,8 @@ export class LoginDialogComponent implements OnInit{
     constructor(private fbService : FirebaseService,private particleService: ParticleService,public dialogRef: MatDialogRef<LoginDialogComponent>) {}
   
     login(form){
-        let username = form.username.trim();
+        let username = form.username;
+        username = username.trim();
         let password = form.password;
         this.particleService.Login(username,password)
             .subscribe(
