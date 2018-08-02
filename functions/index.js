@@ -45,7 +45,7 @@ exports.helloPubSub = functions.pubsub.topic('photon').onPublish((message) => {
      
       let jsonData = JSON.parse(messageBody);
       let KeysJson = renameKeys(jsonData,newKeys);
-    console.log(KeysJson);
+    console.log(message);
       return admin.database().ref("Photon/data").set(KeysJson); 
     });
     // [END Function]

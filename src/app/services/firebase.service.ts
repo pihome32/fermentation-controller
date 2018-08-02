@@ -4,7 +4,6 @@ import { BehaviorSubject ,  Observable } from 'rxjs';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireDatabase, AngularFireObject, AngularFireList, AngularFireAction  } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-
 import * as firebase from 'firebase/app';
 import {PhotonData} from '../models/photon.data';
 
@@ -22,7 +21,7 @@ export class FirebaseService {
 	
 	private tempFormat: string;
 
-  constructor(public af: AngularFireDatabase) {
+  constructor(public afAuth: AngularFireAuth, public af: AngularFireDatabase) {
 		this.tempFormat = localStorage.getItem('tempFormat');
 		this.dataStore = { photonData: this.photonData  };
     this._photonData = <BehaviorSubject<PhotonData>>new BehaviorSubject(this.photonData);

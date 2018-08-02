@@ -16,9 +16,12 @@ export class AppComponent implements OnInit{
 
 constructor(private particleService: ParticleService, private dialogsService: DialogsService){}
 
+
 openDialog() {
   this.dialogsService.login();
 }
+
+
 
   ngOnInit() {
     if (localStorage.getItem('tempFormat') == null){
