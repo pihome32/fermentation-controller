@@ -1,6 +1,6 @@
 # Setup Development Platform
 
-Visual Studio code was used to develop this project. 
+Project developed using Visual Studio Code.  
 
 This project requires a firebase account and project.  
 
