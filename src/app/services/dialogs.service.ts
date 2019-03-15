@@ -1,0 +1,17 @@
+import { Observable } from 'rxjs';
+import { LoginDialogComponent } from '..//login-dialog/login-dialog.component';
+import { MatDialogRef, MatDialog, MatDialogConfig, MatSelectModule } from '@angular/material';
+import { Injectable } from '@angular/core';
+
+
+
+
+@Injectable()
+export class DialogsService {
+    constructor(private dialog: MatDialog) { }
+    public login(): Observable<any> {
+        let dialogRef: MatDialogRef<LoginDialogComponent>;
+        dialogRef = this.dialog.open(LoginDialogComponent);
+        return dialogRef.afterClosed();
+    }
+}
