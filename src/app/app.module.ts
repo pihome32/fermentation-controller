@@ -27,7 +27,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import {Ng2GoogleChartsModule } from 'ng2-google-charts';
 
-
 import { FirebaseService } from './services/firebase.service';
 import { ParticleService } from './services/particle.service';
 import { DialogsService } from './services/dialogs.service';
@@ -66,6 +65,7 @@ import { fireBaseConfig } from './models/firebase.config';
     HistoryChartComponent,
     TabChangeDialogComponent,
     PidHelpDialogComponent,
+
 
   ],
   imports: [

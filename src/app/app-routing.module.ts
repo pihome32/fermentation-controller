@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main',  component: MainComponent },
   { path: 'setup',  component: SetupComponent },
-  { path: 'app-history-chart',  component: HistoryChartComponent }
+  { path: 'app-history-chart',  component: HistoryChartComponent },
 ];
 
 @NgModule({

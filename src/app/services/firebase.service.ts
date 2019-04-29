@@ -72,12 +72,60 @@ export class FirebaseService {
     }
     // ));
     // }
+    get charttest() {
+        // last 1008 is to limit to 7 days of history each sample is 10 minutes.  If the list is too long performance is very bad.
+        return this.af.list<PhotonData>('/TemperatureData', ref => ref.limitToLast(500))
+        .valueChanges().pipe(map(changes => {
+            const rows = changes.map(ch => {
+               // console.log('chart data value change', ch);
+                let mode = ch.currentState;
+                if (mode === '0') mode = 'Off';
+                if (mode === '1') mode = 'Cool';
+                if (mode === '2') mode = 'Heat';
+                const options = {
+                    month: 'short',
+                    day: 'numeric', hour: '2-digit', minute: '2-digit'
+                };
+                const toolTipDate = new Date(ch.ts).toLocaleDateString('en-US', options);
+                if (this.tempFormat === 'C') {
+                    const temp = {
+                        c: [
+                            { v: new Date(ch.ts) },
+                            { v: parseFloat(ch.beerTemp).toFixed(2) },
+                            { v: parseFloat(ch.chamberTemp).toFixed(2) },
+                            { v: this.customToolTip(toolTipDate, parseFloat(ch.chamberTemp).toFixed(2), mode) }
+                        ]
+                    };
+                    return temp;
+                } else {
+                    const temp = {
+                        c: [{ v: new Date(ch.ts) },
+                        { v: (parseFloat(ch.beerTemp) * 1.8 + 32).toFixed(2) },
+                        { v: (parseFloat(ch.chamberTemp) * 1.8 + 32).toFixed(2) },
+                        { v: this.customToolTip(toolTipDate, (parseFloat(ch.chamberTemp) * 1.8 + 32).toFixed(2), mode) }
+                        ]
+                    };
+                    return temp;
+                }
+            });
+            return {
+                cols: [
+                    { id: '1', label: 'Date', type: 'date' },
+                    { id: '2', label: 'Beer', type: 'number' },
+                    { id: '3', label: 'Chamber', type: 'number' },
+                    { id: '4', label: 'Tooltip', type: 'string', role: 'tooltip', p: { 'html': true } },
+                ],
+                rows: rows
+            };
+        }));
+    }
+
 
     get chart() {
         // last 1008 is to limit to 7 days of history each sample is 10 minutes.  If the list is too long performance is very bad.
-        return this.af.list<PhotonData>('/TemperatureData', ref => ref.limitToLast(1008)).snapshotChanges().pipe(map(changes => {
+        return this.af.list<PhotonData>('/TemperatureData', ref => ref.limitToLast(300)).snapshotChanges().pipe(map(changes => {
             const rows = changes.map(ch => {
-                console.log('chart data', ch.payload.val());
+              //  console.log('chart data', ch.payload.val());
                 let mode = ch.payload.val().currentState;
                 if (mode === '0') mode = 'Off';
                 if (mode === '1') mode = 'Cool';
@@ -91,7 +139,7 @@ export class FirebaseService {
                     const temp = {
                         c: [
                             { v: new Date(ch.payload.val().ts) },
-                            { v: parseFloat(ch.payload.val().beerTemp).toFixed(2) },
+                            { v: parseFloat(ch.payload.val().beerTemp).toFixed(2), mode },
                             { v: parseFloat(ch.payload.val().chamberTemp).toFixed(2) },
                             { v: this.customToolTip(toolTipDate, parseFloat(ch.payload.val().chamberTemp).toFixed(2), mode) }
                         ]
@@ -100,8 +148,8 @@ export class FirebaseService {
                 } else {
                     const temp = {
                         c: [{ v: new Date(ch.payload.val().ts) },
-                        { v: (parseFloat(ch.payload.val().beerTemp) * 1.8 + 32).toFixed(2) },
-                        { v: (parseFloat(ch.payload.val().chamberTemp) * 1.8 + 32).toFixed(2) },
+                        { v: +((parseFloat(ch.payload.val().beerTemp) * 1.8 + 32).toFixed(2)) },
+                        { v: +((parseFloat(ch.payload.val().chamberTemp) * 1.8 + 32).toFixed(2)) },
                         { v: this.customToolTip(toolTipDate, (parseFloat(ch.payload.val().chamberTemp) * 1.8 + 32).toFixed(2), mode) }
                         ]
                     };
