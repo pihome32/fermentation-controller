@@ -46,7 +46,7 @@ import { HistoryChartComponent } from './history-chart/history-chart.component';
 import { TabChangeDialogComponent } from './tab-change-dialog/tab-change-dialog.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { PidHelpDialogComponent } from './pid-help-dialog/pid-help-dialog.component';
-import { fireBaseConfig } from './models/firebase.config';
+import { fireBaseConfig } from '../environments/firebase.config';
 
 
 @NgModule({

@@ -33,11 +33,12 @@ public historyChart: GoogleChartInterface = {
     chartType: 'LineChart',
     dataTable: {
       cols: [
-        {id: '1', label: 'Date', type: 'date'},
+        {id: '1', label: 'Date', type: 'number'},
         {id: '2', label: 'Beer', type: 'number'},
-        {id: '3', label: 'Chamber', type: 'number'},
+        {id: '3', label: 'Chamber', type: 'number'}
       ],
-      rows: []
+      rows: [{c:[{v: 0},{v: 0},{v: 0} ]},
+     ],
     },
     options: {
         title: 'Fermentation Log',
@@ -115,7 +116,11 @@ public click (event: ChartSelectEvent) {
 
 
 public updateChart () {
-    this.historyChart.dataTable = this.data;
+    console.log('data check',this.data);
+    if (this.data.rows.length > 1){
+        console.log('data length',this.data.rows.length);
+        this.historyChart.dataTable = this.data;
+    }
 }
 
 @HostListener('window:resize', ['$event'])

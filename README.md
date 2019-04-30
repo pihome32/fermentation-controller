@@ -32,7 +32,7 @@ set to the following. \
 } 
 
 ## Add the FireBase Config to the Project
-In the `src/app/models` folder add a new file "firebase.config.ts" \
+In the `src/environments` folder add a new file "firebase.config.ts" \
 In the firebase project console select Authentication then Web setup. \
 Copy the firebase configuration data and insert into the newly created\
 firebase.config file.
