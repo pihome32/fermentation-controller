@@ -7,7 +7,7 @@ This project requires a firebase account and project.
 Install Node version 9.11.2 (includes NPM)  on your development platform.
 
 From command prompt install the Angular CLI. \
-npm install -g @angular/cli@7.1.4
+npm install -g @angular/cli@7.2.2
 
 ##Install Firebase tools.  (tested with version 6.2.2) 
 npm install -g firebase-tools@6.2.2  
