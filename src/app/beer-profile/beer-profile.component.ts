@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';

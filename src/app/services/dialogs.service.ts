@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { LoginDialogComponent } from '..//login-dialog/login-dialog.component';
-import { MatDialogRef, MatDialog, MatDialogConfig, MatSelectModule } from '@angular/material';
+import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { Injectable } from '@angular/core';
 
 

@@ -1,4 +1,6 @@
-import { MatDialogRef, MatInputModule, MatSelectModule } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Component, OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 

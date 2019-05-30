@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ParticleService } from '../services/particle.service';
 import {FirebaseService} from '../services/firebase.service';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PidHelpDialogComponent } from '../pid-help-dialog/pid-help-dialog.component';
 
 export class SettingData {
