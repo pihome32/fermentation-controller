@@ -28,7 +28,7 @@ export class MainComponent implements OnInit {
   item: Observable<PhotonData>;
  // temp: any;
   // itemSub : Subscription;
-  @ViewChild('modeTab') modeTab;
+  @ViewChild('modeTab', { static: false }) modeTab;
 
 constructor(private fbService: FirebaseService, private particleService: ParticleService, public dialog: MatDialog) {
 

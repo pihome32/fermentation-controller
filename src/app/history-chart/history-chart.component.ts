@@ -13,7 +13,7 @@ import { ChartReadyEvent } from 'ng2-google-charts';
   styleUrls: ['./history-chart.component.css']
 })
 export class HistoryChartComponent implements OnInit, OnChanges {
-    @ViewChild('logChart') chart: GoogleChartComponent;
+    @ViewChild('logChart', { static: false }) chart: GoogleChartComponent;
     tempFormat = localStorage.getItem('tempFormat');
     loading = true;
     data: any;
