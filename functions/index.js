@@ -8,7 +8,8 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 // [END import]
 
-
+pubsub.projects().topics().publish(topic=full_name,
+  body=message).execute()
 
 /**
  * Cloud Function to be triggered by Pub/Sub that logs a message using the data published to the
@@ -16,7 +17,9 @@ admin.initializeApp();
  */
 
 exports.helloPubSub = functions.pubsub.topic('photon').onPublish((message) => {
-    
+  const data = JSON.stringify({ foo: 'bar' });
+  const dataBuffer = Buffer.from(data);  
+  pubsub.topic('particletest').publish(dataBuffer);
 // the Particle function sends keys as numbers to save on string length
 // This list is used to convert keys to readable values
       const newKeys = { 
@@ -46,6 +49,10 @@ exports.helloPubSub = functions.pubsub.topic('photon').onPublish((message) => {
       let jsonData = JSON.parse(messageBody);
       let KeysJson = renameKeys(jsonData,newKeys);
     console.log(message);
+    console.log(message.attributes.device_id);
+      let deviceId = message.attributes.device_id;
+      //data structure so each Photon device will have a unique database location. 
+      // change to deviceId+"/data"
       return admin.database().ref("Photon/data").set(KeysJson); 
     });
     // [END Function]

@@ -1,6 +1,7 @@
 
+import {catchError, map} from 'rxjs/operators';
+
 import {throwError as observableThrowError,  Observable } from 'rxjs';
-import {map} from 'rxjs/operators';
 import { Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, } from '@angular/common/http';
 
@@ -81,10 +82,10 @@ GetVariable(varname:string): Observable<any>  {
     let headers = new HttpHeaders()
         .set('Authorization', 'Bearer '+accessToken)
         .set('content-type', `application/json`);
-    return this.http.get<ParticleData>(this.URLDevice+deviceId+'/'+varname,{headers})
-    .map(res => {return JSON.parse(res.result);}
-    )
-    .catch(this.handleError);
+    return this.http.get<ParticleData>(this.URLDevice+deviceId+'/'+varname,{headers}).pipe(
+    map(res => {return JSON.parse(res.result);}
+    ),
+    catchError(this.handleError),);
 }
 
 // Funtion to call Particle Funciton.  Pass the funtion name and the argument as strings
@@ -96,11 +97,11 @@ CallFunction(funcname:string, arg:string): Observable<any>  {
         .set('Authorization', 'Bearer '+accessToken)
         .set('content-type', `application/json`);
     let body = {args: arg};
-    return this.http.post<ParticleData>(this.URLDevice+deviceId+'/'+funcname,body,{headers})
-        .map(res => 
+    return this.http.post<ParticleData>(this.URLDevice+deviceId+'/'+funcname,body,{headers}).pipe(
+        map(res => 
             res
-        )
-        .catch(this.handleError);
+        ),
+        catchError(this.handleError),);
 }
 
 // Function to log the user into the particle device.  
@@ -116,13 +117,13 @@ Login(username:string, password:string): Observable<any>{
     urlSearchParams.append('client_secret', 'particle');
     urlSearchParams.append('expires_in', '7776000');
     let body = urlSearchParams.toString();
-    return this.http.post<ParticleLoginResponse>(this.URL,body,httpOptions)
-        .map(res => { 
+    return this.http.post<ParticleLoginResponse>(this.URL,body,httpOptions).pipe(
+        map(res => { 
             console.log("login res",res);
             localStorage.setItem('AccessToken',res.access_token);
             this.accessToken = localStorage.getItem('AccessToken');
             },
-            err => this.handleError);
+            err => this.handleError));
     
 }
 //  When a new device is selected the device name is stored to local storage     
@@ -137,15 +138,15 @@ ListDevices(): Observable<any> {
     let headers = new HttpHeaders()
         .set('Authorization', 'Bearer '+accessToken)
         .set('content-type', `application/json`);
-    return this.http.get<ParticleData>(this.URLDevice,{headers})
-        .map(res => {console.log('list devices called',res);
+    return this.http.get<ParticleData>(this.URLDevice,{headers}).pipe(
+        map(res => {console.log('list devices called',res);
             let device = [];
             let body = res;
             for (let i in body) {
                 device[i]=body[i].name;
             }
-            return device;})
-        .catch(this.handleError);
+            return device;}),
+        catchError(this.handleError),);
 }
     
 // Simple error handler that logs error information to the console.

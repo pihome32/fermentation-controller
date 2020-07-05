@@ -27,11 +27,7 @@ export class LoginDialogComponent implements OnInit{
         this.particleService.Login(username,password)
             .subscribe(
             res =>{
-                let deviceCheck = localStorage.getItem('Device');
-                this.loginSuccess = true;
-                this.selectedDevice = "Click to Select Device";
-                this.particleService.ListDevices()
-                    .subscribe(res => this.devices = res);
+                console.log("particle login success: ",res);
             },
             err => {
                 console.log('login failed',err);

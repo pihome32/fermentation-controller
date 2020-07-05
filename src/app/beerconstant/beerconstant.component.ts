@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ChangeTempDialogComponent } from '../change-temp-dialog/change-temp-dialog.component';
 import {PhotonData} from '..//models/photon.data';
-import {Observable} from 'rxjs/Rx';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-beer-constant',

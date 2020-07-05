@@ -1,4 +1,6 @@
 
+import {map} from 'rxjs/operators';
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject ,  Observable } from 'rxjs';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -71,16 +73,16 @@ createNewProfile(name:string){
 }
 
 get profileList(){
-	return this.af.list('/Profile', ref => ref.orderByKey()).snapshotChanges().map(changes => {
+	return this.af.list('/Profile', ref => ref.orderByKey()).snapshotChanges().pipe(map(changes => {
 		return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-	});
+	}));
 	
 	
 }
 
 get chart() {
 	//last 1008 is to limit to 7 days of history each sample is 10 minutes.  If the list is too long performance is very bad.
-	return this.af.list('/TemperatureData', ref => ref.limitToLast(1008)).snapshotChanges().map(changes => {
+	return this.af.list('/TemperatureData', ref => ref.limitToLast(1008)).snapshotChanges().pipe(map(changes => {
 		let rows = changes.map(ch => {
 			let mode = ch.payload.val().currentState
 			if (mode == 0) mode = 'Off';
@@ -94,17 +96,17 @@ get chart() {
 			if (this.tempFormat == "C"){
 				let temp ={c:[
 					{v: new Date(ch.payload.val().ts)},
-					{v: parseFloat(ch.payload.val().beerTemp).toFixed(2)}, 
-					{v: parseFloat(ch.payload.val().chamberTemp).toFixed(2)},
-					{v: this.customToolTip(toolTipDate,parseFloat(ch.payload.val().chamberTemp).toFixed(2),mode)}
+					{v: parseFloat(ch.payload.val().beerTemp).toFixed(1)}, 
+					{v: parseFloat(ch.payload.val().chamberTemp).toFixed(1)},
+					{v: this.customToolTip(toolTipDate,parseFloat(ch.payload.val().chamberTemp).toFixed(1),mode)}
 				]}
 				return temp;
 			}
 			else{
 				let temp ={c:[{v: new Date(ch.payload.val().ts)},
-					{v: (parseFloat(ch.payload.val().beerTemp)* 1.8 + 32).toFixed(2)},
-					{v: (parseFloat(ch.payload.val().chamberTemp)* 1.8 + 32).toFixed(2)},
-					{v: this.customToolTip(toolTipDate,(parseFloat(ch.payload.val().chamberTemp)*1.8+32).toFixed(2),mode)}
+					{v: (parseFloat(ch.payload.val().beerTemp)* 1.8 + 32).toFixed(1)},
+					{v: (parseFloat(ch.payload.val().chamberTemp)* 1.8 + 32).toFixed(1)},
+					{v: this.customToolTip(toolTipDate,(parseFloat(ch.payload.val().chamberTemp)*1.8+32).toFixed(1),mode)}
 				]}
 				return temp;
 			}
@@ -116,7 +118,7 @@ get chart() {
 			{id: '4', label: 'Tooltip', type: 'string', role: 'tooltip', p: {'html': true}},
 		],
 		rows:rows}
-	});
+	}));
 }
 customToolTip(dates,temp,mode){
 	return '<div style="padding:5px 5px 5px 5px;">' 
@@ -131,9 +133,9 @@ customToolTip(dates,temp,mode){
 }
 
 table($key:string){
-	return this.af.list('/Profile/'+$key, ref => ref.orderByChild('day')).snapshotChanges().map(changes => {
+	return this.af.list('/Profile/'+$key, ref => ref.orderByChild('day')).snapshotChanges().pipe(map(changes => {
 		return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-	});
+	}));
 		
 	//.map(res => res);
 }
@@ -192,16 +194,16 @@ ConfigureData(){
 	let targetTemp = parseFloat(this.dataStore.photonData.targetTemp);
 	let tempFormat = localStorage.getItem('tempFormat');
   if (tempFormat == "C") {
-    this.dataStore.photonData.beerTemp = (beerTemp.toFixed(2).toString() + " \xB0C");
-    this.dataStore.photonData.fridgeTemp = (fridgeTemp.toFixed(2).toString() + " \xB0C");
-    this.dataStore.photonData.fridgeTarget = (fridgeTarget.toFixed(2).toString() + " \xB0C");
-    this.dataStore.photonData.targetTemp = (targetTemp.toFixed(2).toString() + " \xB0C");
+    this.dataStore.photonData.beerTemp = (beerTemp.toFixed(1).toString() + " \xB0C");
+    this.dataStore.photonData.fridgeTemp = (fridgeTemp.toFixed(1).toString() + " \xB0C");
+    this.dataStore.photonData.fridgeTarget = (fridgeTarget.toFixed(1).toString() + " \xB0C");
+    this.dataStore.photonData.targetTemp = (targetTemp.toFixed(1).toString() + " \xB0C");
 	}
 	else {
-		this.dataStore.photonData.beerTemp = (((beerTemp * 1.8 + 32).toFixed(2)).toString() + " \xB0F");
-    this.dataStore.photonData.fridgeTemp = (((fridgeTemp * 1.8 + 32).toFixed(2)).toString() + " \xB0F");
-    this.dataStore.photonData.fridgeTarget = (((fridgeTarget * 1.8 + 32).toFixed(2)).toString() + " \xB0F");
-    this.dataStore.photonData.targetTemp = (((targetTemp * 1.8 + 32).toFixed(2)).toString() + " \xB0F");
+		this.dataStore.photonData.beerTemp = (((beerTemp * 1.8 + 32).toFixed(1)).toString() + " \xB0F");
+    this.dataStore.photonData.fridgeTemp = (((fridgeTemp * 1.8 + 32).toFixed(1)).toString() + " \xB0F");
+    this.dataStore.photonData.fridgeTarget = (((fridgeTarget * 1.8 + 32).toFixed(1)).toString() + " \xB0F");
+    this.dataStore.photonData.targetTemp = (((targetTemp * 1.8 + 32).toFixed(1)).toString() + " \xB0F");
 	}
 
 
