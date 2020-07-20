@@ -6,3 +6,11 @@
 export const environment = {
   production: false
 };
+export const firebaseConfig = {
+  apiKey: "AIzaSyC5tA-38qkvkFKQdGlxwh2GkdYtOyHT_Z8",
+    authDomain: "fermentor-e69ac.firebaseapp.com",
+    databaseURL: "https://fermentor-e69ac.firebaseio.com",
+    projectId: "fermentor-e69ac",
+    storageBucket: "fermentor-e69ac.appspot.com",
+    messagingSenderId: "700960236201"
+};

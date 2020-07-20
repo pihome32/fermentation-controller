@@ -48,15 +48,8 @@ import { HistoryChartComponent } from './history-chart/history-chart.component';
 import { TabChangeDialogComponent } from './tab-change-dialog/tab-change-dialog.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { PidHelpDialogComponent } from './pid-help-dialog/pid-help-dialog.component';
+import {firebaseConfig} from 'environments/environment';
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyC5tA-38qkvkFKQdGlxwh2GkdYtOyHT_Z8",
-    authDomain: "fermentor-e69ac.firebaseapp.com",
-    databaseURL: "https://fermentor-e69ac.firebaseio.com",
-    projectId: "fermentor-e69ac",
-    storageBucket: "fermentor-e69ac.appspot.com",
-    messagingSenderId: "700960236201"
-};
 
 
 @NgModule({
